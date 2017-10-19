@@ -5,9 +5,15 @@ defmodule LockedProcess.Application do
 
   use Application
 
+  # def start(_type, _args) do
+  #   LockedProcess.Supervisor.start_link(name: LockedProcess.Supervisor)
+  # end
+
+
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      # LockedProcess.set_combination(1, "message"), []
       # Starts a worker by calling: LockedProcess.Worker.start_link(arg)
       # {LockedProcess.Worker, arg},
     ]
