@@ -3,12 +3,12 @@ defmodule CrackerProcessTest do
 
   test "crack the lock of a combination of 1 to get message" do
     {:ok, pid} = LockedProcess.set_combination(1, "message")
-    assert [:ok, "message"] == CrackerProcess.pick_lock(pid)
+    assert [:ok, "message", 1] == CrackerProcess.pick_lock(pid)
   end
 
-  test "combination of 2 does not get message" do
-    {:ok, pid} = LockedProcess.set_combination(1, "message")
-    assert [:ok, "message"] == CrackerProcess.pick_lock(pid)
+  test "crack the lock of a combination of 2 to get message" do
+    {:ok, pid} = LockedProcess.set_combination(2, "message")
+    assert [:ok, "message", 2] == CrackerProcess.pick_lock(pid)
   end
 
 end
