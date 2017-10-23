@@ -15,7 +15,7 @@ defmodule LockedProcess do
     if (attempt == combination) do
       [:ok, message]
     else
-      [:error, "try again"]
+      [:error, "no access"]
     end
   end
 

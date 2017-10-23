@@ -8,12 +8,12 @@ defmodule CrackerProcess do
             |> examine_contents
           end )
       |> Enum.reject(fn(value) -> value == nil end)
-      |> List.first
+      |> List.first      
 
     message
   end
 
-\  def examine_contents([:ok, message, combination]) do
+  def examine_contents([:ok, message, combination]) do
     # found it, so just return
     [:ok, message, combination]
   end
