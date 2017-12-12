@@ -9,18 +9,11 @@ defmodule LockedProcess.Application do
   #   LockedProcess.Supervisor.start_link(name: LockedProcess.Supervisor)
   # end
 
+  def main(args \\ []) do
+    start(:null, "")
+  end
 
   def start(_type, _args) do
-    # List all child processes to be supervised
-    children = [
-      # LockedProcess.set_combination(1, "message"), []
-      # Starts a worker by calling: LockedProcess.Worker.start_link(arg)
-      # {LockedProcess.Worker, arg},
-    ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
-    Supervisor.start_link(children, opts)
+    LockSupervisor.start_link([123])
   end
 end

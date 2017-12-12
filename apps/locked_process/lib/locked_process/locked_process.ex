@@ -35,11 +35,11 @@ defmodule LockedProcess do
   # ----------------------------------------- #
 
   def init(combination) do
-    {:ok, combination} # state is stored as list of passwords
+    {:ok, [combination]} # state is stored as list of combinations
   end
 
   def handle_call({:pick, combination_attempt}, _from, combination) do # ----> aynchronous request
-    if (combination_attempt == combination) do
+    if combination_attempt in combination do
       {:reply, {:ok}, combination}
     else
       {:reply, {:error,"no access"}, combination}
@@ -47,8 +47,8 @@ defmodule LockedProcess do
   end
 
   def handle_call({:reset, {old_combination, new_combination}}, _from, combination) do
-    if (old_combination == combination) do
-      {:reply, {:ok}, new_combination}
+    if old_combination in combination do
+      {:reply, {:ok}, [new_combination]}
     else
       {:reply, {:error,"no access"}, combination}
     end

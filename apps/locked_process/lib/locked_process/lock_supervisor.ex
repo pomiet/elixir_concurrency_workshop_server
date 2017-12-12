@@ -11,11 +11,11 @@ defmodule LockSupervisor do
   end
 
   def init(:ok) do
-    children = [
-      worker(LockedProcess, [123])
-    ]
-    opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
-
-    Supervisor.init(children, opts)
+    # children = [
+    #   worker(LockedProcess, [123])
+    # ]
+    # opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
+    #
+    # Supervisor.init(children, opts)
   end
 end
