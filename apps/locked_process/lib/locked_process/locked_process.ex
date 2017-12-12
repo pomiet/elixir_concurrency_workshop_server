@@ -1,8 +1,5 @@
 defmodule LockedProcess do
   use GenServer
-  require Logger
-
-  use GenServer
 
   # ----------------------------------------- #
   # Client - API                              #
