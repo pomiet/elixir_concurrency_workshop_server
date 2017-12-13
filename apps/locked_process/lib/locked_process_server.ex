@@ -54,11 +54,6 @@ end
 defmodule LockedProcessConnection do
   # Convension all erlang processes have "start" function.
   def start(control_pid, client_socket) do
-    welcome(control_pid, client_socket)
-  end
-
-  def welcome(control_pid, client_socket) do
-    :gen_tcp.send(client_socket, "Welcome (quit to exit, or shutdown to stop everything)\n")
     received_loop(control_pid, client_socket)
   end
 
@@ -81,6 +76,12 @@ defmodule LockedProcessConnection do
     send control_pid, "shutdown"
   end
 
+  def received_data(control_pid, client_socket, {:ok, "test\r\n"}) do
+    IO.puts "TEST #{inspect client_socket}"
+    :gen_tcp.send(client_socket, "Yep - Got your message\n")
+    received_loop(control_pid, client_socket)
+  end
+
   def received_data(control_pid, client_socket, {:ok, combination}) do
     IO.puts "DATA #{inspect combination}"
     message = try_combination(LockedProcess.pick_lock(combination |> String.trim))
@@ -100,6 +101,5 @@ defmodule LockedProcessConnection do
   def try_combination({:ok, message}) do
     message
   end
-
 
 end
