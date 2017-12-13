@@ -12,15 +12,14 @@ defmodule LockedProcess.Application do
   def main(args \\ []) do
     {options, _, _} =
       OptionParser.parse(args,
-      switches: [combo: :string,
-                 message: :string,
-                 port: :integer,
-                 delay: :integer])
+          switches: [combo: :string, message: :string,
+                     port: :integer, delay: :integer])
 
     start(options[:combo], options[:message])
   end
 
   def start(combination, message) do
     LockSupervisor.start_link([combination, message])
+    LockedProcessServer.control()
   end
 end

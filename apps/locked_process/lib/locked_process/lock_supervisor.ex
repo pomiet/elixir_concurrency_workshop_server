@@ -1,9 +1,9 @@
 defmodule LockSupervisor do
   use Supervisor
 
-  def start_link(args) do
+  def start_link([combination, message]) do
     children = [
-      worker(LockedProcess, [123, "Correct: E"])
+      worker(LockedProcess, [combination, message])
     ]
     opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
 
