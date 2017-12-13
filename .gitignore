@@ -20,4 +20,5 @@ erl_crash.dump
 *.ez
 
 # Ignore executable files
+restart.sh
 lock
