@@ -2,7 +2,7 @@ defmodule LockedProcess.SupervisorTest do
   use ExUnit.Case
 
   setup do
-    {:ok, server_pid} = LockedProcess.start_link([123, "Correct: E"])
+    {:ok, server_pid} = LockSupervisor.start_link([123, "Correct: E"])
     {:ok, server: server_pid}
   end
 

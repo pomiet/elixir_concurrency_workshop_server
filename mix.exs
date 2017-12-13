@@ -3,10 +3,16 @@ defmodule ElixirConcurrencyWorkshop.Mixfile do
 
   def project do
     [
+      app: :lock,
       apps_path: "apps",
-      start_permanent: Mix.env == :prod,
+      version: "0.0.1",
+      escript: escript(),
       deps: deps()
     ]
+  end
+
+  def escript do
+    [main_module: LockedProcess.Application]
   end
 
   # Dependencies listed here are available only for this
@@ -15,6 +21,8 @@ defmodule ElixirConcurrencyWorkshop.Mixfile do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [
+      {:mix_test_watch, "~> 0.5.0"}
+    ]
   end
 end

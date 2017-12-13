@@ -9,12 +9,12 @@ defmodule LockedProcess do
     GenServer.call(__MODULE__, {:pick, combination})
   end
 
-  def reset({old_combination, [new_combination, new_message]}) do
-    GenServer.call(__MODULE__, {:reset, {old_combination, [new_combination, new_message]}})
-  end
-
   def pick_lock(server_pid, combination) do
     GenServer.call(server_pid, {:pick, combination})
+  end
+
+  def reset({old_combination, [new_combination, new_message]}) do
+    GenServer.call(__MODULE__, {:reset, {old_combination, [new_combination, new_message]}})
   end
 
   def reset(server_pid, {old_combination, [new_combination, new_message]}) do
@@ -25,6 +25,9 @@ defmodule LockedProcess do
     GenServer.start_link(__MODULE__, [combination, message], name: __MODULE__)
   end
 
+  def start_link(combination, message) do
+    GenServer.start_link(__MODULE__, [combination, message], name: __MODULE__)
+  end
 
   # ----------------------------------------- #
   # Server - API                              #
