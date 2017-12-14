@@ -11,11 +11,11 @@ defmodule LockedProcessTest do
   end
 
   test "attempt with 2 returns error", %{server: pid} do
-    assert {:error, "no access"} == LockedProcess.pick_lock(pid, 2)
+    assert {:error, "Can't crack me!"} == LockedProcess.pick_lock(pid, 2)
   end
 
   test "attempt with 2 returns error and attempt with 123 returns ok", %{server: pid} do
-    assert {:error, "no access"} == LockedProcess.pick_lock(pid, 2)
+    assert {:error, "Can't crack me!"} == LockedProcess.pick_lock(pid, 2)
     assert {:ok, "Correct: E"} == LockedProcess.pick_lock(pid, 123)
   end
 
@@ -25,6 +25,6 @@ defmodule LockedProcessTest do
   end
 
   test "reset combination failure" ,%{server: pid} do
-    assert {:error,"no access"} == LockedProcess.reset(pid, {456, [789, "Correct: L"]})
+    assert {:error,"Can't crack me!"} == LockedProcess.reset(pid, {456, [789, "Correct: L"]})
   end
 end

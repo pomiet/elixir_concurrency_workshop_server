@@ -8,7 +8,6 @@ defmodule LockedProcessServer do
 
   def wait_for_command() do
     receive do
-      "shutdown"   -> IO.puts "Shutdown..."
       message      -> IO.puts "Unexpected Exit: #{inspect message}"
     end
   end
@@ -61,19 +60,6 @@ defmodule LockedProcessConnection do
   def received_loop(control_pid, client_socket) do
     received_data(control_pid, client_socket,
                   :gen_tcp.recv(client_socket, 0))
-  end
-
-  def received_data(_, client_socket, {:ok, "quit\r\n"}) do
-    :gen_tcp.send(client_socket, "Goodbye\n")
-    :gen_tcp.close(client_socket)
-    IO.puts "QUIT #{inspect client_socket}"
-  end
-
-  def received_data(control_pid, client_socket, {:ok, "shutdown\r\n"}) do
-    :gen_tcp.send(client_socket, "Shutting Down\n")
-    :gen_tcp.close(client_socket)
-    IO.puts "Shutting Down #{inspect client_socket}"
-    send control_pid, "shutdown"
   end
 
   def received_data(control_pid, client_socket, {:ok, "test\r\n"}) do

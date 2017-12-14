@@ -42,7 +42,7 @@ defmodule LockedProcess do
     if (combination_attempt == combination) do
       {:reply, {:ok, message}, [combination, message]}
     else
-      {:reply, {:error,"no access"}, [combination, message]}
+      {:reply, {:error,"Can't crack me!"}, [combination, message]}
     end
   end
 
@@ -50,7 +50,7 @@ defmodule LockedProcess do
     if (old_combination == combination) do
       {:reply, {:ok}, [new_combination, new_message]}
     else
-      {:reply, {:error,"no access"}, [combination, message]}
+      {:reply, {:error,"Can't crack me!"}, [combination, message]}
     end
   end
 end

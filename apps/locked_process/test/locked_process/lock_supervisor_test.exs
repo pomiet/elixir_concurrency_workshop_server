@@ -11,7 +11,7 @@ defmodule LockedProcess.SupervisorTest do
   end
 
   test "attempt with 2 returns error" do
-    assert {:error, "no access"} == LockedProcess.pick_lock(2)
+    assert {:error, "Can't crack me!"} == LockedProcess.pick_lock(2)
   end
 
   test "reset combination success" do
@@ -20,7 +20,7 @@ defmodule LockedProcess.SupervisorTest do
   end
 
   test "reset combination failure" do
-    assert {:error,"no access"} == LockedProcess.reset({456, [789, "Correct: L"]})
+    assert {:error,"Can't crack me!"} == LockedProcess.reset({456, [789, "Correct: L"]})
   end
 
 end
