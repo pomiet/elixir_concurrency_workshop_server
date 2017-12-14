@@ -22,8 +22,9 @@ defmodule LockedProcessListener do
 
   def listening(control_pid) do
     IO.puts "Locked Process Listening"
+    port = PortSingleton.value()
     listening(control_pid,
-              :gen_tcp.listen(2345, [:binary, packet: :line, active: false, reuseaddr: true]))
+              :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true]))
   end
 
   def listening(control_pid, {:ok, listen_socket}) do

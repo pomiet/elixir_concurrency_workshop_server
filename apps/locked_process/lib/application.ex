@@ -15,11 +15,14 @@ defmodule LockedProcess.Application do
           switches: [combo: :string, message: :string,
                      port: :integer, delay: :integer])
 
-    start(options[:combo], options[:message])
+    start(options[:combo], options[:message],
+          options[:port], options[:delay])
   end
 
-  def start(combination, message) do
+  def start(combination, message, port, delay) do
     LockSupervisor.start_link([combination, message])
+    PortSingleton.start_link()
+    PortSingleton.update(port)
     LockedProcessServer.control()
   end
 end
