@@ -21,12 +21,12 @@ defmodule LockedProcess do
     GenServer.call(server_pid, {:reset, {old_combination, [new_combination, new_message]}})
   end
 
-  def start_link([combination, message]) do
-    GenServer.start_link(__MODULE__, [combination, message], name: __MODULE__)
+  def start_link([combination, message, delay]) do
+    GenServer.start_link(__MODULE__, [combination, message, delay], name: __MODULE__)
   end
 
-  def start_link(combination, message) do
-    GenServer.start_link(__MODULE__, [combination, message], name: __MODULE__)
+  def start_link(combination, message, delay) do
+    GenServer.start_link(__MODULE__, [combination, message, delay], name: __MODULE__)
   end
 
   # ----------------------------------------- #
@@ -34,23 +34,26 @@ defmodule LockedProcess do
   # i.e. Server calls the following functions #
   # ----------------------------------------- #
 
-  def init([combination, message]) do
-    {:ok, [combination, message]} # state is stored as list of combinations
+  def init([combination, message, delay]) do
+    {:ok, [combination, message, delay]} # state is stored as list of combinations
   end
 
-  def handle_call({:pick, combination_attempt}, _from, [combination, message]) do
+  def handle_call({:pick, combination_attempt}, _from, [combination, message, delay]) do
+    # Simluate resource utliization
+    :timer.sleep(delay)
+
     if (combination_attempt == combination) do
-      {:reply, {:ok, message}, [combination, message]}
+      {:reply, {:ok, message}, [combination, message, delay]}
     else
-      {:reply, {:error,"Can't crack me!"}, [combination, message]}
+      {:reply, {:error,"Can't crack me!"}, [combination, message, delay]}
     end
   end
 
-  def handle_call({:reset, {old_combination, [new_combination, new_message]}}, _from, [combination, message]) do
+  def handle_call({:reset, {old_combination, [new_combination, new_message]}}, _from, [combination, message, delay]) do
     if (old_combination == combination) do
-      {:reply, {:ok}, [new_combination, new_message]}
+      {:reply, {:ok}, [new_combination, new_message, delay]}
     else
-      {:reply, {:error,"Can't crack me!"}, [combination, message]}
+      {:reply, {:error,"Can't crack me!"}, [combination, message, delay]}
     end
   end
 end

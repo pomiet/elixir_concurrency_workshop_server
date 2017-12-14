@@ -2,7 +2,7 @@ defmodule LockedProcessTest do
   use ExUnit.Case
 
   setup do
-    {:ok, server_pid} = LockedProcess.start_link([123, "Correct: E"])
+    {:ok, server_pid} = LockedProcess.start_link([123, "Correct: E", 1])
     {:ok, server: server_pid}
   end
 
