@@ -1,8 +1,8 @@
 # Module for the main erlang process that controls all linked child erlang processes
 defmodule LockedProcessServer do
-  def control() do
+  def control(port) do
     control_pid = self()
-    spawn_monitor(LockedProcessListener, :start, [control_pid])
+    spawn_monitor(LockedProcessListener, :start, [control_pid, port])
     wait_for_command()
   end
 
@@ -16,13 +16,13 @@ end
 # Module to isolate the first child process responsible for accepting connections.
 defmodule LockedProcessListener do
   # Convension all erlang processes have "start" function.
-  def start(control_pid) do
-    listening(control_pid)
+  def start(control_pid, port) do
+    listener(control_pid, port)
   end
 
-  def listening(control_pid) do
+  def listener(control_pid, port) do
     IO.puts "Locked Process Listening"
-    port = PortSingleton.value()
+    # port = PortSingleton.value()
     listening(control_pid,
               :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true]))
   end
@@ -63,16 +63,17 @@ defmodule LockedProcessConnection do
                   :gen_tcp.recv(client_socket, 0))
   end
 
-  def received_data(control_pid, client_socket, {:ok, "test\r\n"}) do
-    IO.puts "TEST #{inspect client_socket}"
-    :gen_tcp.send(client_socket, "Yep - Got your message\n")
+  def received_data(control_pid, client_socket, {:ok, "ping\r\n"}) do
+    IO.puts "PING #{inspect client_socket}"
+    :gen_tcp.send(client_socket, "pong\n")
     received_loop(control_pid, client_socket)
   end
 
   def received_data(control_pid, client_socket, {:ok, combination}) do
-    IO.puts "DATA #{inspect combination}"
-    message = try_combination(LockedProcess.pick_lock(combination |> String.trim))
-    :gen_tcp.send(client_socket, message)
+    combination
+      |> String.trim
+      |> try_combination(client_socket)
+
     received_loop(control_pid, client_socket)
   end
 
@@ -81,12 +82,12 @@ defmodule LockedProcessConnection do
     IO.puts "CLOSED #{inspect client_socket}"
   end
 
-  def try_combination({:error, message}) do
-    message
+  def try_combination(combination, client_socket) do
+    IO.puts "DATA #{inspect combination}"
+    {_, message} = LockedProcess.pick_lock(combination)
+
+    :gen_tcp.send(client_socket, message)
   end
 
-  def try_combination({:ok, message}) do
-    message
-  end
 
 end

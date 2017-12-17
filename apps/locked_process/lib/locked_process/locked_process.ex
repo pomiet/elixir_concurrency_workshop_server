@@ -35,12 +35,12 @@ defmodule LockedProcess do
   # ----------------------------------------- #
 
   def init([combination, message, delay]) do
-    {:ok, [combination, message, delay]} # state is stored as list of combinations
+    {:ok, [combination, message, delay]}
   end
 
   def handle_call({:pick, combination_attempt}, _from, [combination, message, delay]) do
     # Simluate resource utliization
-    :timer.sleep(delay)
+    # :timer.sleep(delay)
 
     if (combination_attempt == combination) do
       {:reply, {:ok, message}, [combination, message, delay]}
