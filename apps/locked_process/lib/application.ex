@@ -10,8 +10,6 @@ defmodule LockedProcess.Application do
 
   def start(combination, message, port, delay) do
     LockSupervisor.start_link([combination, message, delay])
-    # PortSingleton.start_link()
-    # PortSingleton.update(port)
     LockedProcessServer.control(port)
   end
 
