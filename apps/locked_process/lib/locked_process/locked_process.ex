@@ -29,6 +29,10 @@ defmodule LockedProcess do
     GenServer.start_link(__MODULE__, [combination, message, delay], name: __MODULE__)
   end
 
+  def stop() do
+    GenServer.stop(__MODULE__)
+  end
+
   # ----------------------------------------- #
   # Server - API                              #
   # i.e. Server calls the following functions #
