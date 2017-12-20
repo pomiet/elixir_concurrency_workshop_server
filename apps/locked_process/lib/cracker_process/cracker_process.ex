@@ -40,7 +40,7 @@ defmodule CrackerProcess do
   end
 
   def send_guess(guess) do
-    LockedProcess.pick_lock(guess)
+    LockedProcess.pick_lock("test", guess)
   end
 
   def examine_contents({:ok, message}) do

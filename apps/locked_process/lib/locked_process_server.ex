@@ -84,7 +84,7 @@ defmodule LockedProcessConnection do
 
   def try_combination(combination, client_socket) do
     IO.puts "DATA #{inspect combination}"
-    {_, message} = LockedProcess.pick_lock(combination)
+    {_, message} = LockedProcess.pick_lock("test", combination)
 
     :gen_tcp.send(client_socket, message)
   end

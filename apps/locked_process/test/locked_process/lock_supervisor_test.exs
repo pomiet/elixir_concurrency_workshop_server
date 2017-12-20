@@ -7,9 +7,9 @@ defmodule LockedProcess.SupervisorTest do
   end
 
   test "supervisor restarts after exit", %{server: pid} do
-    assert {:ok, "rock on"} == LockedProcess.pick_lock(123)
-    LockedProcess.stop()
+    assert {:ok, "rock on"} == LockedProcess.pick_lock("test", 123)
+    LockedProcess.stop("test")
     :timer.sleep 1000
-    assert {:ok, "rock on"} == LockedProcess.pick_lock(123)
+    assert {:ok, "rock on"} == LockedProcess.pick_lock("test", 123)
   end
 end

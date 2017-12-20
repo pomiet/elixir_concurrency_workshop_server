@@ -6,20 +6,21 @@ defmodule LockedProcess do
   # i.e. Client calls the following functions #
   # ----------------------------------------- #
   def pick_lock(server_id, combination) do
-    # try_call(server_id, {:pick, combination})
-    GenServer.call({:global, {:combolock, "test"}}, {:pick, combination})
+    try_call(server_id, {:pick, combination})
+    # GenServer.call({:global, {:combolock, "test"}}, {:pick, combination})
   end
 
-  def pick_lock(server_pid, combination) do
-     GenServer.call(server_pid, {:pick, combination})
-  end
+  # def pick_lock(server_pid, combination) do
+  #    GenServer.call(server_pid, {:pick, combination})
+  # end
 
-  def reset({old_combination, [new_combination, new_message]}) do
-    GenServer.call(__MODULE__, {:reset, {old_combination, [new_combination, new_message]}})
-  end
+  # def reset({old_combination, [new_combination, new_message]}) do
+  #   GenServer.call(__MODULE__, {:reset, {old_combination, [new_combination, new_message]}})
+  # end
 
   def reset(server_pid, {old_combination, [new_combination, new_message]}) do
-    GenServer.call(server_pid, {:reset, {old_combination, [new_combination, new_message]}})
+    try_call(server_pid, {:reset, {old_combination, [new_combination, new_message]}} )
+    # GenServer.call(server_pid, {:reset, {old_combination, [new_combination, new_message]}})
   end
 
   def start_link([combination, message, delay, server_name]) do
@@ -30,8 +31,8 @@ defmodule LockedProcess do
     GenServer.start_link(__MODULE__, [combination, message, delay], name: ref(server_name))
   end
 
-  def stop() do
-    GenServer.stop({:global, {:combolock, "test"}})
+  def stop(server_name) do
+    GenServer.stop(ref(server_name))
   end
 
   # ----------------------------------------- #
@@ -62,8 +63,8 @@ defmodule LockedProcess do
     end
   end
 
-  defp ref(server_id) do
-    {:global, {:combolock, server_id}}
+  defp ref(server_name) do
+    {:global, {:combolock, server_name}}
   end
 
   defp try_call(server_id, message) do
