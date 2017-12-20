@@ -5,22 +5,12 @@ defmodule LockedProcess do
   # Client - API                              #
   # i.e. Client calls the following functions #
   # ----------------------------------------- #
-  def pick_lock(server_id, combination) do
-    try_call(server_id, {:pick, combination})
-    # GenServer.call({:global, {:combolock, "test"}}, {:pick, combination})
+  def pick_lock(server_name, combination) do
+    try_call(server_name, {:pick, combination})
   end
 
-  # def pick_lock(server_pid, combination) do
-  #    GenServer.call(server_pid, {:pick, combination})
-  # end
-
-  # def reset({old_combination, [new_combination, new_message]}) do
-  #   GenServer.call(__MODULE__, {:reset, {old_combination, [new_combination, new_message]}})
-  # end
-
-  def reset(server_pid, {old_combination, [new_combination, new_message]}) do
-    try_call(server_pid, {:reset, {old_combination, [new_combination, new_message]}} )
-    # GenServer.call(server_pid, {:reset, {old_combination, [new_combination, new_message]}})
+  def reset(server_name, {old_combination, [new_combination, new_message]}) do
+    try_call(server_name, {:reset, {old_combination, [new_combination, new_message]}} )
   end
 
   def start_link([combination, message, delay, server_name]) do
