@@ -5,12 +5,13 @@ defmodule LockedProcess do
   # Client - API                              #
   # i.e. Client calls the following functions #
   # ----------------------------------------- #
-  def pick_lock(combination) do
-    GenServer.call(__MODULE__, {:pick, combination})
+  def pick_lock(server_id, combination) do
+    # try_call(server_id, {:pick, combination})
+    GenServer.call({:global, {:combolock, "test"}}, {:pick, combination})
   end
 
   def pick_lock(server_pid, combination) do
-    GenServer.call(server_pid, {:pick, combination})
+     GenServer.call(server_pid, {:pick, combination})
   end
 
   def reset({old_combination, [new_combination, new_message]}) do
@@ -21,16 +22,16 @@ defmodule LockedProcess do
     GenServer.call(server_pid, {:reset, {old_combination, [new_combination, new_message]}})
   end
 
-  def start_link([combination, message, delay]) do
-    GenServer.start_link(__MODULE__, [combination, message, delay], name: __MODULE__)
+  def start_link([combination, message, delay, server_name]) do
+    GenServer.start_link(__MODULE__, [combination, message, delay], name: ref(server_name))
   end
 
-  def start_link(combination, message, delay) do
-    GenServer.start_link(__MODULE__, [combination, message, delay], name: __MODULE__)
+  def start_link(combination, message, delay, server_name) do
+    GenServer.start_link(__MODULE__, [combination, message, delay], name: ref(server_name))
   end
 
   def stop() do
-    GenServer.stop(__MODULE__)
+    GenServer.stop({:global, {:combolock, "test"}})
   end
 
   # ----------------------------------------- #
@@ -58,6 +59,19 @@ defmodule LockedProcess do
       {:reply, {:ok}, [new_combination, new_message, delay]}
     else
       {:reply, {:error,"Can't crack me!"}, [combination, message, delay]}
+    end
+  end
+
+  defp ref(server_id) do
+    {:global, {:combolock, server_id}}
+  end
+
+  defp try_call(server_id, message) do
+    case GenServer.whereis(ref(server_id)) do
+      nil ->
+        {:error, :invalid_server}
+      combolock ->
+        GenServer.call(combolock, message)
     end
   end
 end

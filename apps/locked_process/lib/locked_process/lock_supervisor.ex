@@ -7,7 +7,7 @@ defmodule LockSupervisor do
 
   def init([combination, message, delay]) do
     children = [
-      worker(LockedProcess, [combination, message, delay])
+      worker(LockedProcess, [combination, message, delay, "test"])
     ]
     opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
 
