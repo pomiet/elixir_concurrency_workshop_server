@@ -8,7 +8,7 @@ defmodule LockedProcessServer do
 
   def wait_for_command() do
     receive do
-      message      -> IO.puts "Unexpected Exit: #{inspect message}"
+      message -> IO.puts "Unexpected Exit: #{inspect message}"
     end
   end
 end
