@@ -9,8 +9,7 @@ defmodule LockedProcess.Application do
   end
 
   def start(combination, message, port, delay) do
-    LockSupervisor.start_link([combination, message, delay])
-    LockedProcessServer.control(port)
+    # what should i do now?
   end
 
   def start(_type, args) do

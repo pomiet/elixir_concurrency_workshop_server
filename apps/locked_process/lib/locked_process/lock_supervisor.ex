@@ -2,15 +2,10 @@ defmodule LockSupervisor do
   use Supervisor
 
   def start_link([combination, message, delay]) do
-    {:ok, pid} = Supervisor.start_link(__MODULE__, [combination, message, delay])
+    # what should i do now?
   end
 
   def init([combination, message, delay]) do
-    children = [
-      worker(LockedProcess, [combination, message, delay, "test"])
-    ]
-    opts = [strategy: :one_for_one, name: LockedProcess.Supervisor]
-
-    supervise(children, opts)
+    # what should i do now?
   end
 end
